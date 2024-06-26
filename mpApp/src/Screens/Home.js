@@ -1,10 +1,22 @@
-import { View, Text, StatusBar, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StatusBar,
+  StyleSheet,
+  FlatList,
+  Platform,
+  ScrollView,
+  Button,
+} from "react-native";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { add } from "../Redux/Slices/AlbumSlice";
-// import ScrollList from "../Components/ScrollList";
+import ScrollList from "../Components/ScrollList";
+import { AntDesign } from "@expo/vector-icons";
+
 const Home = () => {
+  let data = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const getAlbum = useSelector((state) => state.Albums.Albums);
   const dispatch = useDispatch();
   const API_TO_GET_ALBUMS = async () => {
@@ -14,8 +26,7 @@ const Home = () => {
     };
     try {
       const response = await axios.request(options);
-      //   console.log("This is Response->", response.data.albums);
-      dispatch(add(response.data));
+      dispatch(add(response.data.albums));
     } catch (error) {
       console.error(error);
     }
@@ -26,6 +37,12 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.MainHeader}>Albums</Text>
+      <ScrollView>
+        {getAlbum != null &&
+          getAlbum.map((item, index) => {
+            return <ScrollList data={item} />;
+          })}
+      </ScrollView>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#F0F0F0"
@@ -43,6 +60,7 @@ const styles = StyleSheet.create({
   },
   MainHeader: {
     fontSize: 30,
+    marginTop: Platform.OS === "ios" ? 50 : 0,
     fontWeight: "bold",
     textAlign: "center",
     color: "#000000",
