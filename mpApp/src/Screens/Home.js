@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { add } from "../Redux/AlbumSlice";
-
+import ScrollList from "../Components/ScrollList";
 const Home = () => {
   const getAlbum = useSelector((state) => state.Albums.Albums);
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const Home = () => {
   }, []);
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text style={styles.MainHeader}>Albums</Text>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#F0F0F0"
@@ -40,5 +40,11 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  MainHeader: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#000000",
   },
 });
