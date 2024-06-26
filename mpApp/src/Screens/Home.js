@@ -2,8 +2,8 @@ import { View, Text, StatusBar, StyleSheet } from "react-native";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { add } from "../Redux/AlbumSlice";
-import ScrollList from "../Components/ScrollList";
+import { add } from "../Redux/Slices/AlbumSlice";
+// import ScrollList from "../Components/ScrollList";
 const Home = () => {
   const getAlbum = useSelector((state) => state.Albums.Albums);
   const dispatch = useDispatch();
