@@ -16,14 +16,28 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("window");
 import { FontAwesome5 } from "@expo/vector-icons";
-import Animated, {
-  Easing,
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
+import { Audio } from "expo-av";
+import TrackPlayer, { Capability } from "react-native-track-player";
 
 const Song = (props) => {
+  // const setupPlayer = async () => {
+  //   try {
+  //     await TrackPlayer.setupPlayer();
+  //     await TrackPlayer.updateOptions({
+  //       // Media controls capabilities
+  //       capabilities: [
+  //         Capability.Play,
+  //         Capability.Pause,
+  //         Capability.SkipToNext,
+  //         Capability.SkipToPrevious,
+  //         Capability.Stop,
+  //       ],
+
+  //       // Capabilities that will show up when the notification is in the compact form on Android
+  //       compactCapabilities: [Capability.Play, Capability.Pause],
+  //     });
+  //   } catch (e) {}
+  // };
   const navigation = useNavigation();
   const getSelectedSong = useSelector(
     //this is for the selected song
@@ -32,22 +46,44 @@ const Song = (props) => {
   const { id, index } = props.route.params; // This is id to show Image and index
   const getTracks = useSelector((state) => state.Tracks.Tracks); //to get all tracks
 
-  // useEffect(() => {
-  //   console.log(getTracks.tracks[index]);
-  // }, [getTracks]);
+  useEffect(() => {
+    playSound();
+  }, []);
 
   const [index1, setIndex1] = useState(index);
-  const [play, setPlay] = useState(false);
-  const HandlePlayPause = () => {
-    setPlay(!play);
-  };
   const HandleNextPrev = (order) => {
     if (order === "next") {
       setIndex1((prev) => (prev + 1) % getTracks.tracks.length);
+      playSound();
     } else {
       setIndex1((prev) => (prev - 1) % getTracks.tracks.length);
+      playSound();
     }
   };
+  const [sound, setSound] = useState();
+  const [isplaying, setIsplaying] = useState(true);
+
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync({
+      uri: getTracks.tracks[index1].previewURL,
+    });
+    setSound(sound);
+    if (isplaying) {
+      await sound.playAsync();
+    } else {
+      await sound.pauseAsync();
+    }
+    setIsplaying(!isplaying);
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   return (
     <View style={styles.container}>
       <Surface
@@ -119,8 +155,8 @@ const Song = (props) => {
             <TouchableOpacity style={styles.btnStyle}>
               <AntDesign name="caretleft" size={38} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnStyle} onPress={HandlePlayPause}>
-              {play ? (
+            <TouchableOpacity style={styles.btnStyle} onPress={playSound}>
+              {!isplaying ? (
                 <FontAwesome5 name="pause" size={40} color="black" />
               ) : (
                 <FontAwesome5 name="play" size={40} color="black" />
