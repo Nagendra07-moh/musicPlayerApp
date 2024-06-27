@@ -41,10 +41,10 @@ const Tracks = (props) => {
     API_TO_GET_Tracks();
   }, []);
 
-  const HandleSelectEvent = (item) => {
+  const HandleSelectEvent = (item, index) => {
     dispatch(removeSong());
     dispatch(selectSong(item));
-    navigation.navigate("Song");
+    navigation.navigate("Song", (data = { id, index }));
   };
   return (
     <ScrollView style={styles.cointaner}>
@@ -94,7 +94,7 @@ const Tracks = (props) => {
             return (
               <TouchableOpacity
                 key={index}
-                onPress={() => HandleSelectEvent(item)}
+                onPress={() => HandleSelectEvent(item, index)}
               >
                 <Surface style={styles.cointanerCards} elevation={4}>
                   <View>
