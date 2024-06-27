@@ -16,6 +16,7 @@ const { height, width } = Dimensions.get("screen");
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { addTracks } from "../Redux/Slices/TracksSlice";
+import { selectSong, removeSong } from "../Redux/Slices/SelectedSongSlice";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
@@ -39,6 +40,12 @@ const Tracks = (props) => {
   useEffect(() => {
     API_TO_GET_Tracks();
   }, []);
+
+  const HandleSelectEvent = (item) => {
+    dispatch(removeSong());
+    dispatch(selectSong(item));
+    navigation.navigate("Song");
+  };
   return (
     <ScrollView style={styles.cointaner}>
       <View
@@ -85,7 +92,10 @@ const Tracks = (props) => {
         {getTracks != null &&
           getTracks.tracks.map((item, index) => {
             return (
-              <TouchableOpacity key={index}>
+              <TouchableOpacity
+                key={index}
+                onPress={() => HandleSelectEvent(item)}
+              >
                 <Surface style={styles.cointanerCards} elevation={4}>
                   <View>
                     <Image
