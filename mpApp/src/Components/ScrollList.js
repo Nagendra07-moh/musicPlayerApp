@@ -36,7 +36,7 @@ const ScrollList = ({ data }) => {
               fontWeight: "500",
             }}
           >
-            {data.name}
+            {data.artistName}
           </Text>
           <View style={{ flexDirection: "row", marginTop: 5 }}>
             <Fontisto name="date" size={14} color="white" />

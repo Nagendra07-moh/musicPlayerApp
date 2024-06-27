@@ -8,10 +8,10 @@ export const tracksSlice = createSlice({
   name: "Tracks",
   initialState,
   reducers: {
-    add: (state, payload) => {
-      state.Albums = payload.payload;
+    addTracks: (state, payload) => {
+      state.Tracks = payload.payload;
     },
   },
 });
-export const { add } = tracksSlice.actions;
+export const { addTracks } = tracksSlice.actions;
 export default tracksSlice.reducer;
