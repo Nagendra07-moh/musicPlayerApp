@@ -48,51 +48,32 @@ const Song = (props) => {
 
   useEffect(() => {
     playSound();
-  }, []);
+  }, [isplaying]);
 
   const [index1, setIndex1] = useState(index);
   const HandleNextPrev = (order) => {
     if (order === "next") {
+      setIsplaying(false);
       setIndex1((prev) => (prev + 1) % getTracks.tracks.length);
+      setSound(null);
       playSound();
     } else {
+      setIsplaying(false);
       setIndex1((prev) => (prev - 1) % getTracks.tracks.length);
+      setSound(null);
       playSound();
     }
   };
-  const [sound, setSound] = useState();
-  const [isplaying, setIsplaying] = useState(true);
+  const [sound, setSound] = useState(null);
+  const [isplaying, setIsplaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
-
-  async function loadSound() {
-    const { sound } = await Audio.Sound.createAsync(
-      {
-        uri: "https://audio-1-cf.prod.napster.com/1751034250_8241f1bcae74acff661d9f530d0ce1f014185f60/B01/66742c87bdc3877e61650c69/66742c8a7b12e15c850e135b.mp3",
-      },
-      { shouldPlay: false }
-    );
-    setSound(sound);
-
-    sound.setOnPlaybackStatusUpdate((status) => {
-      if (status.isLoaded) {
-        setDuration(status.durationMillis);
-        setPosition(status.positionMillis);
-      }
-    });
-  }
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync({
       uri: getTracks.tracks[index1].previewURL,
     });
     setSound(sound);
-    if (isplaying) {
-      await sound.playAsync();
-    } else {
-      await sound.pauseAsync();
-    }
-    setIsplaying(!isplaying);
 
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.isLoaded) {
@@ -101,6 +82,17 @@ const Song = (props) => {
       }
     });
   }
+  async function playPauseSound() {
+    if (sound) {
+      if (isplaying) {
+        await sound.pauseAsync();
+      } else {
+        await sound.playAsync();
+      }
+      setIsplaying(!isplaying);
+    }
+  }
+
   async function jumpForward() {
     if (sound) {
       const status = await sound.getStatusAsync();
@@ -137,7 +129,7 @@ const Song = (props) => {
   return (
     <View style={styles.container}>
       <Surface
-        style={{ backgroundColor: "gray", height: height * 0.08 }}
+        style={{ backgroundColor: "#2CB67D", height: height * 0.08 }}
         elevation={5}
       >
         <Pressable
@@ -195,7 +187,7 @@ const Song = (props) => {
               <Text>{`${formatTime(position)}`}</Text>
             </View>
             <View style={{ width: width * 0.75, margin: 10 }}>
-              <ProgressBar progress={0.05} color={"red"} />
+              <ProgressBar progress={duration - 10} color={"red"} />
             </View>
             <View>
               <Text>{`${formatTime(duration)}`}</Text>
@@ -213,8 +205,8 @@ const Song = (props) => {
             <TouchableOpacity style={styles.btnStyle} onPress={jumpBackward}>
               <AntDesign name="caretleft" size={38} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnStyle} onPress={playSound}>
-              {!isplaying ? (
+            <TouchableOpacity style={styles.btnStyle} onPress={playPauseSound}>
+              {isplaying ? (
                 <FontAwesome5 name="pause" size={40} color="black" />
               ) : (
                 <FontAwesome5 name="play" size={40} color="black" />

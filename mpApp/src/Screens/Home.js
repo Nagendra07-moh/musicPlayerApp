@@ -42,11 +42,7 @@ const Home = () => {
             return <ScrollList data={item} key={index} />;
           })}
       </ScrollView>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#F0F0F0"
-        hidde={true}
-      />
+      <StatusBar backgroundColor="#2CB67D" />
     </View>
   );
 };
@@ -56,12 +52,14 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFE3B3",
   },
   MainHeader: {
     fontSize: 30,
     marginTop: Platform.OS === "ios" ? 50 : 0,
     fontWeight: "bold",
+    backgroundColor: "#2CB67D",
     textAlign: "center",
-    color: "#000000",
+    color: "white",
   },
 });

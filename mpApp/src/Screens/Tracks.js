@@ -7,6 +7,7 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
+  TouchableHighlight,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Surface } from "react-native-paper";
@@ -92,7 +93,7 @@ const Tracks = (props) => {
         {getTracks != null &&
           getTracks.tracks.map((item, index) => {
             return (
-              <TouchableOpacity
+              <TouchableHighlight
                 key={index}
                 onPress={() => HandleSelectEvent(item, index)}
               >
@@ -153,7 +154,7 @@ const Tracks = (props) => {
                     />
                   </View>
                 </Surface>
-              </TouchableOpacity>
+              </TouchableHighlight>
             );
           })}
       </ScrollView>

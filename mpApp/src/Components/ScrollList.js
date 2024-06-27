@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Pressable,
+  TouchableHighlight,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { Surface } from "react-native-paper";
 import axios from "axios";
@@ -12,7 +20,7 @@ const ScrollList = ({ data }) => {
     navigation.navigate("Tracks", (data = { data }));
   };
   return (
-    <TouchableOpacity onPress={HandlePressEvent}>
+    <TouchableHighlight onPress={HandlePressEvent}>
       <Surface style={styles.cointaner} elevation={4}>
         <View>
           <Image
@@ -52,7 +60,7 @@ const ScrollList = ({ data }) => {
           </View>
         </View>
       </Surface>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 export default ScrollList;
