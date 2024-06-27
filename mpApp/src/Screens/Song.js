@@ -187,7 +187,7 @@ const Song = (props) => {
               <Text>{`${formatTime(position)}`}</Text>
             </View>
             <View style={{ width: width * 0.75, margin: 10 }}>
-              <ProgressBar progress={duration - 10} color={"red"} />
+              <ProgressBar progress={position} color={"red"} />
             </View>
             <View>
               <Text>{`${formatTime(duration)}`}</Text>
