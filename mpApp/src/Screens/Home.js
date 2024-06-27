@@ -16,7 +16,6 @@ import ScrollList from "../Components/ScrollList";
 import { AntDesign } from "@expo/vector-icons";
 
 const Home = () => {
-  let data = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const getAlbum = useSelector((state) => state.Albums.Albums);
   const dispatch = useDispatch();
   const API_TO_GET_ALBUMS = async () => {

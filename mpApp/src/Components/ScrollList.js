@@ -19,7 +19,12 @@ const ScrollList = ({ data }) => {
             source={{
               uri: `https://api.napster.com/imageserver/v2/albums/${data.id}/images/150x100.png`,
             }}
-            style={{ width: 150, height: 100, borderTopLeftRadius: 5 }}
+            style={{
+              width: 150,
+              height: 100,
+              borderTopLeftRadius: 5,
+              borderBottomLeftRadius: 5,
+            }}
           />
         </View>
         <View style={styles.textSpace}>
