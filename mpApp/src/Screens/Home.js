@@ -37,10 +37,10 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.MainHeader}>Albums</Text>
-      <ScrollView>
+      <ScrollView style={{ paddingBottom: 70 }}>
         {getAlbum != null &&
           getAlbum.map((item, index) => {
-            return <ScrollList data={item} />;
+            return <ScrollList data={item} key={index} />;
           })}
       </ScrollView>
       <StatusBar
