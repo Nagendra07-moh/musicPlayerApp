@@ -62,6 +62,25 @@ const Song = (props) => {
   };
   const [sound, setSound] = useState();
   const [isplaying, setIsplaying] = useState(true);
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  async function loadSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      {
+        uri: "https://audio-1-cf.prod.napster.com/1751034250_8241f1bcae74acff661d9f530d0ce1f014185f60/B01/66742c87bdc3877e61650c69/66742c8a7b12e15c850e135b.mp3",
+      },
+      { shouldPlay: false }
+    );
+    setSound(sound);
+
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (status.isLoaded) {
+        setDuration(status.durationMillis);
+        setPosition(status.positionMillis);
+      }
+    });
+  }
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync({
@@ -74,6 +93,13 @@ const Song = (props) => {
       await sound.pauseAsync();
     }
     setIsplaying(!isplaying);
+
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (status.isLoaded) {
+        setDuration(status.durationMillis);
+        setPosition(status.positionMillis);
+      }
+    });
   }
   async function jumpForward() {
     if (sound) {
@@ -101,6 +127,12 @@ const Song = (props) => {
         }
       : undefined;
   }, [sound]);
+
+  const formatTime = (milliseconds) => {
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
 
   return (
     <View style={styles.container}>
@@ -158,8 +190,16 @@ const Song = (props) => {
               {getTracks.tracks[index1].artistName}
             </Text>
           </View>
-          <View style={{ marginTop: 25, marginHorizontal: 40 }}>
-            <ProgressBar progress={0.05} color={"red"} />
+          <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
+            <View>
+              <Text>{`${formatTime(position)}`}</Text>
+            </View>
+            <View style={{ width: width * 0.75, margin: 10 }}>
+              <ProgressBar progress={0.05} color={"red"} />
+            </View>
+            <View>
+              <Text>{`${formatTime(duration)}`}</Text>
+            </View>
           </View>
         </View>
         <View style={{ marginTop: 50 }}>
