@@ -75,6 +75,24 @@ const Song = (props) => {
     }
     setIsplaying(!isplaying);
   }
+  async function jumpForward() {
+    if (sound) {
+      const status = await sound.getStatusAsync();
+      const newPosition = Math.min(
+        status.positionMillis + 5000,
+        status.durationMillis
+      );
+      await sound.setPositionAsync(newPosition);
+    }
+  }
+
+  async function jumpBackward() {
+    if (sound) {
+      const status = await sound.getStatusAsync();
+      const newPosition = Math.max(status.positionMillis - 5000, 0);
+      await sound.setPositionAsync(newPosition);
+    }
+  }
 
   useEffect(() => {
     return sound
@@ -152,7 +170,7 @@ const Song = (props) => {
             >
               <AntDesign name="stepbackward" size={38} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnStyle}>
+            <TouchableOpacity style={styles.btnStyle} onPress={jumpBackward}>
               <AntDesign name="caretleft" size={38} color="black" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.btnStyle} onPress={playSound}>
@@ -162,7 +180,7 @@ const Song = (props) => {
                 <FontAwesome5 name="play" size={40} color="black" />
               )}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnStyle}>
+            <TouchableOpacity style={styles.btnStyle} onPress={jumpForward}>
               <AntDesign name="caretright" size={38} color="black" />
             </TouchableOpacity>
             <TouchableOpacity
